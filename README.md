@@ -482,8 +482,8 @@ sudo install -m 0755 sipp /usr/local/bin/sipp**
 
 ## References & Useful Resources
 
-https://www.kamailio.org/w/documentation/
-https://sipp.sourceforge.net/doc/reference.html
-https://manpages.ubuntu.com/manpages/focal/man8/sngrep.8.html
-https://sipp.readthedocs.io/en/latest/installation.html
-https://sipp.readthedocs.io/en/latest/sipp.html
+- https://www.kamailio.org/w/documentation/
+- https://sipp.sourceforge.net/doc/reference.html
+- https://manpages.ubuntu.com/manpages/focal/man8/sngrep.8.html
+- https://sipp.readthedocs.io/en/latest/installation.html
+- https://sipp.readthedocs.io/en/latest/sipp.html

@@ -462,12 +462,55 @@ sipp KAMAILIO_PUBLIC_IP:5060 -sf options.xml -t u1 -m 1 -trace_msg -trace_err -t
 - Replace placeholders such as `YOUR_PROJECT_ID`, `YOUR_PUBLIC_IP`, and `KAMAILIO_PUBLIC_IP` with your actual values.
 - If you plan to test TLS, make sure the target port and certificates are configured correctly.
 - Keeping the firewall scope limited to your IP is safer than exposing SSH broadly.
+## Testing Scenarios. 
+
+# OPTIONS to Kamailio
+```bash
+sipp kamailio_IP:5060 -sf options.xml -t u1 -s kamailio -m 1 -trace_msg -trace_err -trace_logs
+```
+# Failed Invite with 480. 
+This is used to get 480 Temporarily Unavailable from an INVITE.
+sipp kamailio_IP:5060 -sf invite_480.xml -t u1 -s 1001 -m 1 -trace_msg -trace_err -trace_logs
+
+# Successful INVITE to the SIPp UAS
+This is the server-side for a successful call. You run it on another VM, another pod, or even your laptop. The UAS scenarios start with recv request="INVITE" and respond using the [last_*] headers.
+```bash
+sipp -sf uas_200.xml -i 0.0.0.0 -p 5062 -t u1 -trace_msg -trace_err -trace_logs
+```
+This is the client-side for testing against uas_200.xml. The flow matches SIPp’s built-in UAC scenario: INVITE, optional 100/180, 200, ACK, pause, BYE, 200.
+```bash
+sipp IP_DEL_UAS:5062 -sf uac_200.xml -t u1 -s 1001 -m 1 -trace_msg -trace_err -trace_logs
+```
+
+# 401/407 with authentication
+
+-This works when peer reply  407 Proxy Authentication Required or 401 Unauthorized. SIPp support both bu the official way it´s <recv ... auth="true"> following next message as authentication
+```bash
+sipp IP_DEL_PROXY_O_UAS:5060 -sf invite_auth_407.xml -t u1 -s 1001 -m 1 -trace_msg -trace_err -trace_logs
+```
+# How to catch in wireshark. 
+
+Run this in sipp VM
+
+sudo tcpdump -i any -w sipp-demo.pcap udp port 5060
 
 ## Deployment issues . 
 
 -During sipp installation got bellow error. 
 
-matu@sip-tools-vm:~/sipp$ cmake . -DUSE_SSL=1 -DUSE_PCAP=1 -- The C compiler identification is GNU 13.3.0 -- The CXX compiler identification is GNU 13.3.0 -- Detecting C compiler ABI info -- Detecting C compiler ABI info - done -- Check for working C compiler: /usr/bin/cc - skipped -- Detecting C compile features -- Detecting C compile features - done -- Detecting CXX compiler ABI info -- Detecting CXX compiler ABI info - done -- Check for working CXX compiler: /usr/bin/c++ - skipped -- Detecting CXX compile features -- Detecting CXX compile features - done -- SCTP is disabled -- GSL is disabled -- Checking for module 'pugixml' -- Package 'pugixml', required by 'virtual:world', not found CMake Error at CMakeLists.txt:151 (message): pugixml is required. Either install the library or run 'git submodule update --init'
+matu@sip-tools-vm:~/sipp$ cmake . -DUSE_SSL=1 -DUSE_PCAP=1 -- The C compiler identification is GNU 13.3.0 
+-- The CXX compiler identification is GNU 13.3.0 
+-- Detecting C compiler ABI info 
+-- Detecting C compiler ABI info - done 
+-- Check for working C compiler: /usr/bin/cc - skipped 
+-- Detecting C compile features
+-- Detecting C compile features - done 
+-- Detecting CXX compiler ABI info 
+-- Detecting CXX compiler ABI info - done 
+-- Check for working CXX compiler: /usr/bin/c++ - skipped 
+-- Detecting CXX compile features 
+-- Detecting CXX compile features - done -- SCTP is disabled -- GSL is disabled 
+-- Checking for module 'pugixml' -- Package 'pugixml', required by 'virtual:world', not found CMake Error at CMakeLists.txt:151 (message): pugixml is required. Either install the library or run 'git submodule update --init'
 
 had to modyfy the Cmake part, as bellow. 
 

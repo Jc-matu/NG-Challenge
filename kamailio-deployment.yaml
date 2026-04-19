@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kamailio
+  namespace: telecom
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kamailio
+  template:
+    metadata:
+      labels:
+        app: kamailio
+    spec:
+      containers:
+      - name: kamailio
+        image: ghcr.io/kamailio/kamailio-ci:6.0.0-alpine
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5060
+          protocol: UDP
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "250m"
+            memory: "256Mi"
+        volumeMounts:
+        - name: kamailio-config
+          mountPath: /etc/kamailio/kamailio.cfg
+          subPath: kamailio.cfg
+      volumes:
+      - name: kamailio-config
+        configMap:
+          name: kamailio-config

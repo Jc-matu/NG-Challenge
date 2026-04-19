@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kamailio-config
+  namespace: telecom
+data:
+  kamailio.cfg: |
+   #!KAMAILIO
+
+    debug=2
+    log_stderror=yes
+    children=2
+    disable_tcp=yes
+
+    listen=udp:0.0.0.0:5060 advertise 34.59.213.59:5060
+
+    loadmodule "sl.so"
+    loadmodule "maxfwd.so"
+    loadmodule "textops.so"
+    loadmodule "pv.so"
+    loadmodule "xlog.so"
+    
+    
+    request_route {
+    if (!mf_process_maxfwd_header("10")) {
+        sl_send_reply("483", "Too Many Hops");
+        exit;
+    }
+
+    xlog("L_INFO", "[lab] $rm from $si:$sp to $ru callid=$ci\n");
+
+    if (is_method("OPTIONS")) {
+        sl_send_reply("200", "OK");
+        exit;
+    }
+
+    if (is_method("INVITE")) {
+        sl_send_reply("480", "Temporarily Unavailable");
+        exit;
+    }
+
+    sl_send_reply("501", "Not Implemented");
+    exit;
+    }

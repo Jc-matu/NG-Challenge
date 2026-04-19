@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kamailio-udp
+  namespace: telecom
+  annotations:
+    cloud.google.com/l4-rbs: "enabled"
+spec:
+  type: LoadBalancer
+  loadBalancerIP: 34.59.213.59
+  externalTrafficPolicy: Local
+  selector:
+    app: kamailio
+  ports:
+  - name: sip-udp
+    protocol: UDP
+    port: 5060
+    targetPort: 5060

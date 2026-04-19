@@ -29,6 +29,11 @@ Kamailio supports defining `listen` and `advertise` per socket, which is very us
 - [7. Expose Kamailio with a LoadBalancer](#7-expose-kamailio-with-a-loadbalancer)
 - [8. Verify that Kamailio is up](#8-verify-that-kamailio-is-up)
 
+## Global Architecture. 
+
+User → SIP client / SIPp → GCP public IP → GKE external UDP LoadBalancer Service → single GKE node → single Kamailio pod ← ConfigMap-provided kamailio.cfg
+with sngrep/SIPp VM used externally for traffic generation and troubleshooting.
+
 
 ## 1. Prepare your environment
 

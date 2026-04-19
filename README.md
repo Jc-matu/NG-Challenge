@@ -19,7 +19,10 @@ Key Features
 Kamailio supports defining `listen` and `advertise` per socket, which is very useful behind NAT or a load balancer. Its `request_route` also requires explicit actions such as `sl_send_reply()` or `forward()` to respond to or route SIP traffic. In addition, the `sl` module exists specifically for stateless replies, which is perfect for this minimal lab.
 
 ## Table of Contents
+## Table of Contents
 
+- [Overview](#overview)
+- [Global Architecture](#global-architecture)
 - [1. Prepare your environment](#1-prepare-your-environment)
 - [2. Create a small cluster](#2-create-a-small-cluster)
 - [3. Reserve a static public IP](#3-reserve-a-static-public-ip)
@@ -28,6 +31,23 @@ Kamailio supports defining `listen` and `advertise` per socket, which is very us
 - [6. Create the Deployment](#6-create-the-deployment)
 - [7. Expose Kamailio with a LoadBalancer](#7-expose-kamailio-with-a-loadbalancer)
 - [8. Verify that Kamailio is up](#8-verify-that-kamailio-is-up)
+- [Guide to Build a Second VM for `sngrep` + `SIPp`](#guide-to-build-a-second-vm-for-sngrep--sipp)
+  - [1. Create the VM in GCP](#1-create-the-vm-in-gcp)
+  - [2. Open Only the Access You Really Need](#2-open-only-the-access-you-really-need)
+  - [3. Connect via SSH](#3-connect-via-ssh)
+  - [4. Install `sngrep`](#4-install-sngrep)
+  - [5. Install `SIPp`](#5-install-sipp)
+  - [6. Run a Quick Validation Test](#6-run-a-quick-validation-test)
+  - [7. Use It Against Your Kamailio in GKE](#7-use-it-against-your-kamailio-in-gke)
+- [Notes](#notes)
+- [Testing Scenarios](#testing-scenarios)
+  - [OPTIONS to Kamailio](#options-to-kamailio)
+  - [Failed INVITE with 480](#failed-invite-with-480)
+  - [Successful INVITE to the SIPp UAS](#successful-invite-to-the-sipp-uas)
+  - [401/407 with authentication](#401407-with-authentication)
+  - [How to catch in Wireshark](#how-to-catch-in-wireshark)
+- [Deployment issues](#deployment-issues)
+- [References & Useful Resources](#references--useful-resources)
 
 ## Global Architecture. 
 
@@ -267,15 +287,6 @@ kubectl logs -n telecom deploy/kamailio --previous
 
 This guide explains how to create a second VM in Google Cloud Platform (GCP) to run **sngrep** and **SIPp**.
 
-## Table of Contents
-
-- [1. Create the VM in GCP](#1-create-the-vm-in-gcp)
-- [2. Open Only the Access You Really Need](#2-open-only-the-access-you-really-need)
-- [3. Connect via SSH](#3-connect-via-ssh)
-- [4. Install sngrep](#4-install-sngrep)
-- [5. Install SIPp](#5-install-sipp)
-- [6. Run a Quick Validation Test](#6-run-a-quick-validation-test)
-- [7. Use It Against Your Kamailio in GKE](#7-use-it-against-your-kamailio-in-gke)
 
 ---
 

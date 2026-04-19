@@ -1,5 +1,6 @@
 # Technical Challenge NG-Voice
-Test Kubernetes by Juan Carlos Maturano Saldaña. 
+Test Kubernetes by Juan Carlos Maturano.
+
 # Overview
 This doc contains step-by-step, how to deploy #GKE Standard zonal + Deployment of Kamailio including ConfigMap with kamailio.cfg and Service LoadBalancer for UDP/5060. 
 

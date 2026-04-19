@@ -462,17 +462,18 @@ sipp KAMAILIO_PUBLIC_IP:5060 -sf options.xml -t u1 -m 1 -trace_msg -trace_err -t
 - Replace placeholders such as `YOUR_PROJECT_ID`, `YOUR_PUBLIC_IP`, and `KAMAILIO_PUBLIC_IP` with your actual values.
 - If you plan to test TLS, make sure the target port and certificates are configured correctly.
 - Keeping the firewall scope limited to your IP is safer than exposing SSH broadly.
+- 
 ## Testing Scenarios. 
 
-# OPTIONS to Kamailio
+ OPTIONS to Kamailio
 ```bash
 sipp kamailio_IP:5060 -sf options.xml -t u1 -s kamailio -m 1 -trace_msg -trace_err -trace_logs
 ```
-# Failed Invite with 480. 
+ Failed Invite with 480. 
 This is used to get 480 Temporarily Unavailable from an INVITE.
 sipp kamailio_IP:5060 -sf invite_480.xml -t u1 -s 1001 -m 1 -trace_msg -trace_err -trace_logs
 
-# Successful INVITE to the SIPp UAS
+ Successful INVITE to the SIPp UAS
 This is the server-side for a successful call. You run it on another VM, another pod, or even your laptop. The UAS scenarios start with recv request="INVITE" and respond using the [last_*] headers.
 ```bash
 sipp -sf uas_200.xml -i 0.0.0.0 -p 5062 -t u1 -trace_msg -trace_err -trace_logs
@@ -481,14 +482,13 @@ This is the client-side for testing against uas_200.xml. The flow matches SIPpâ€
 ```bash
 sipp IP_DEL_UAS:5062 -sf uac_200.xml -t u1 -s 1001 -m 1 -trace_msg -trace_err -trace_logs
 ```
-
-# 401/407 with authentication
+401/407 with authentication
 
 -This works when peer reply  407 Proxy Authentication Required or 401 Unauthorized. SIPp support both bu the official way itÂ´s <recv ... auth="true"> following next message as authentication
 ```bash
 sipp IP_DEL_PROXY_O_UAS:5060 -sf invite_auth_407.xml -t u1 -s 1001 -m 1 -trace_msg -trace_err -trace_logs
 ```
-# How to catch in wireshark. 
+How to catch in wireshark. 
 
 Run this in sipp VM
 
